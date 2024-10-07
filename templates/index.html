@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Dashboard de Métricas</h1>
+    <h3>CPU Usage Over Time</h3>
+    <div>
+        <img id="cpu-plot" src="/plot" alt="CPU Usage Plot">
+    </div>
+
+    <script>
+        setInterval(function(){
+            // Fetch and update the plot image every 5 seconds
+            document.getElementById('cpu-plot').src = '/plot?' + new Date().getTime();
+        }, 5000);
+    </script>
+</body>
+</html>
