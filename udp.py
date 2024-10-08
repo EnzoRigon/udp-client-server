@@ -2,7 +2,8 @@ import socket
 import threading
 import argparse
 import time
-from bcc import 
+from bcc import BPF
+
 
 # Global variable to control the interval for sending periodic messages
 report_send_interval = 5
