@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  udp-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: udp_service
+    ports:
+      - "5005:5005"
+    networks:
+      - app-network
+    command: ["python", "udp.py"]
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dashboard
+    ports:
+      - "5000:5000"
+    networks:
+      - app-network
+    command: ["python", "dashboard.py"]
+
+networks:
+  app-network:
+    driver: bridge

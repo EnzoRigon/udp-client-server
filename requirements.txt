@@ -1,4 +1,4 @@
-bcc
+git+https://github.com/iovisor/bcc.git
 iniconfig
 numpy
 packaging
