@@ -1,8 +1,8 @@
-bcc==0.1.10
-iniconfig==2.0.0
-numpy==1.24.4
-packaging==24.1
-pluggy==1.5.0
-pytest==8.3.3
-traitlets==5.14.3
-traittypes==0.2.1
+bcc
+iniconfig
+numpy
+packaging
+pluggy
+pytest
+traitlets
+traittypes
