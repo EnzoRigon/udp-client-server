@@ -7,6 +7,8 @@ WORKDIR /app
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     wget \
+    gnupg \
+    software-properties-common \
     python3 \
     python3-pip \
     python-is-python3 \
@@ -23,21 +25,16 @@ RUN apt-get update && apt-get install -y \
     libelf-dev \
     libfl-dev \
     python3-distutils \
+    clang \
     checkinstall \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Download and extract BCC source code
-RUN wget https://github.com/iovisor/bcc/releases/download/v0.25.0/bcc-src-with-submodule.tar.gz && \
-    tar xf bcc-src-with-submodule.tar.gz && \
-    cd bcc && \
-    mkdir build && \
-    cd build && \
-    cmake -DCMAKE_INSTALL_PREFIX=/usr -DPYTHON_CMD=python3 .. && \
-    make && \
-    checkinstall --pkgname=bcc --default && \
-    cd /app && \
-    rm -rf bcc bcc-src-with-submodule.tar.gz
+# Add the BCC repository and install BCC tools
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4052245BD4284CDD && \
+    echo "deb https://repo.iovisor.org/apt/$(lsb_release -cs) $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/iovisor.list && \
+    apt-get update && \
+    apt-get install -y bcc-tools libbcc-examples linux-headers-$(uname -r)
 
 # Copy the requirements file to the working directory
 COPY requirements.txt .
