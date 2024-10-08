@@ -2,14 +2,13 @@ import socket
 import threading
 import argparse
 import time
-from bcc import BPF
+from bcc import 
 
 # Global variable to control the interval for sending periodic messages
 report_send_interval = 5
 # Set to keep track of connected clients
 clients = set()
 
-participating_machines = ['','']  # Lista de máquinas participantes
 
 def get_local_ip():
     """
@@ -34,6 +33,7 @@ def get_local_ip():
         print(f"Error trying to get local IP: {e}")
         return "127.0.0.1"
 
+
 def is_server_running(server_ip, port):
     """
     Check if the server is already running by sending a ping message.
@@ -52,6 +52,7 @@ def is_server_running(server_ip, port):
     finally:
         sock.close()
 
+
 def server(server_ip, port):
     """
     Start the UDP server to listen for incoming messages.
@@ -69,6 +70,7 @@ def server(server_ip, port):
         for client in clients:
             sock.sendto(response.encode(), client)
 
+
 def receive_messages(sock):
     """
     Function to receive messages from the server.
@@ -85,10 +87,12 @@ def receive_messages(sock):
         except ValueError:
             print(f"Error processing metric: {data}")
 
+
 def process_metrics(data):
     if "CPU Usage" in data or "Context Switches" in data:
         return f"Received: {data}"
     return "Unknown metric"
+
 
 def send_periodic_message(sock, server_ip, port):
     global report_send_interval
@@ -97,6 +101,7 @@ def send_periodic_message(sock, server_ip, port):
         cpu_usage, num_processes, context_switches = collect_metrics()
         message = f"CPU Usage: {cpu_usage:.2f}%, Processes: {num_processes}, Context Switches: {context_switches}"
         sock.sendto(message.encode(), (server_ip, port))
+
 
 def client(server_ip, port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -112,6 +117,7 @@ def client(server_ip, port):
         message = input("")
         sock.sendto(message.encode(), (server_ip, port))
 
+
 def start_server_with_check(server_ip, port):
     if not is_server_running(server_ip, port):
         server_thread = threading.Thread(target=server, args=(server_ip, port))
@@ -120,6 +126,7 @@ def start_server_with_check(server_ip, port):
         print("Server started.")
     else:
         print("The server is already running, it will not be started again.")
+
 
 def collect_metrics():
     # Define BPF program for CPU usage and context switch collection
@@ -184,6 +191,7 @@ def collect_metrics():
         except KeyboardInterrupt:
             break
 
+
 def main(args):
     server_ip = args.ip if args.ip else get_local_ip()
     port = args.port
@@ -194,6 +202,7 @@ def main(args):
     client_thread.daemon = True
     client_thread.start()
     client_thread.join()
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="UDP server and client")
