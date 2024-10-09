@@ -1,7 +1,0 @@
-iniconfig
-numpy
-packaging
-pluggy
-pytest
-traitlets
-traittypes

@@ -1,28 +1,25 @@
 version: '3.8'
 
 services:
-  udp-service:
+  server:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: udp_service
+    container_name: udp_server
+    command: ["tail", "-f", "/dev/null"]
     ports:
       - "5005:5005"
-    networks:
-      - app-network
-    command: ["python", "udp.py"]
 
-  dashboard:
+  client1:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: dashboard
-    ports:
-      - "5000:5000"
-    networks:
-      - app-network
-    command: ["python", "dashboard.py"]
+    container_name: udp_client1
+    command: ["tail", "-f", "/dev/null"]
 
-networks:
-  app-network:
-    driver: bridge
+  client2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: udp_client2
+    command: ["tail", "-f", "/dev/null"]
