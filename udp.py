@@ -5,7 +5,7 @@ import time
 from bcc import BPF
 
 # Global variable to control the interval for sending periodic messages
-report_send_interval = 20
+report_send_interval = 5
 # Set to keep track of connected clients
 clients = set()
 
