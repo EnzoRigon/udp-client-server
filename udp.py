@@ -79,7 +79,7 @@ def receive_messages(sock):
         data, address = sock.recvfrom(1024)
         data = data.decode()
 
-         try:
+        try:
             data = int(data)
             report_send_interval = data
             print(f"Report send interval updated to: {report_send_interval}")
