@@ -155,6 +155,7 @@ def collect_metrics():
 
     while True:
         try:
+            time.sleep(5)
             total_cpu_usage = 0
             process_count = 0
             context_switches = 0
