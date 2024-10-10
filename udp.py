@@ -79,13 +79,13 @@ def receive_messages(sock):
 
         try:
             metrics = process_metrics(data)
-            print(f"Metrics of {address}: {metrics}")
+            print(f"{metrics}")
         except ValueError:
             print(f"Error processing metric: {data}")
 
 def process_metrics(data):
     if "CPU Usage" in data or "Context Switches" in data:
-        return f"Received: {data}"
+        return f"Received: {data}\n"
     return "Unknown metric"
 
 def send_periodic_message(sock, server_ip, port):
