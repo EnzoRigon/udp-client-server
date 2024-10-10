@@ -77,11 +77,14 @@ def receive_messages(sock):
         data, address = sock.recvfrom(1024)
         data = data.decode()
 
-        try:
-            data = int(data)
-            report_send_interval = data
-            print(f"Report send interval updated to: {report_send_interval}")
-        except ValueError:
+        if "--time" in data:
+            parts = data.split()
+            if len(parts) == 5 and parts[3] == "--time":
+                report_send_interval = int(parts[4])
+                print(f"Report send interval updated to: {report_send_interval}")
+            else:
+                print("Invalid command. Usage: --time <interval>")
+        else:
             metrics = process_metrics(data)
             print(f"{metrics}")
         
