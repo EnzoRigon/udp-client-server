@@ -5,7 +5,7 @@ import time
 from bcc import BPF
 
 # Global variable to control the interval for sending periodic messages
-report_send_interval = 0
+report_send_interval = 5
 # Set to keep track of connected clients
 clients = set()
 
@@ -91,9 +91,9 @@ def process_metrics(data):
     return "Unknown metric"
 
 def send_periodic_message(sock, server_ip, port):
-    global report_send_interval
+    
     while True:
-        time.sleep(report_send_interval)
+        
         cpu_usage, num_processes, context_switches = collect_metrics()
         message = f"CPU Usage: {cpu_usage:.2f}%, Processes: {num_processes}, Context Switches: {context_switches}"
         sock.sendto(message.encode(), (server_ip, port))
@@ -153,9 +153,10 @@ def collect_metrics():
     # Load eBPF program
     b = BPF(text=bpf_program)
 
+    global report_send_interval
     while True:
         try:
-            time.sleep(5)
+            time.sleep(report_send_interval)
             total_cpu_usage = 0
             process_count = 0
             context_switches = 0
