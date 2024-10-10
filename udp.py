@@ -9,8 +9,6 @@ report_send_interval = 5
 # Set to keep track of connected clients
 clients = set()
 
-participating_machines = ['','']  # Lista de máquinas participantes
-
 def get_local_ip():
     """
     Get the local IP address of the machine.
@@ -81,13 +79,13 @@ def receive_messages(sock):
 
         try:
             metrics = process_metrics(data)
-            print(f"Metrics of {address}: {metrics}")
+            print(f"{metrics}")
         except ValueError:
             print(f"Error processing metric: {data}")
 
 def process_metrics(data):
     if "CPU Usage" in data or "Context Switches" in data:
-        return f"Received: {data}"
+        return f"Received: {data}\n"
     return "Unknown metric"
 
 def send_periodic_message(sock, server_ip, port):
@@ -155,7 +153,6 @@ def collect_metrics():
 
     while True:
         try:
-            time.sleep(5)
             total_cpu_usage = 0
             process_count = 0
             context_switches = 0
