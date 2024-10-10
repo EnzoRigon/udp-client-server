@@ -78,20 +78,22 @@ def receive_messages(sock):
         data = data.decode()
 
         try:
+            data = int(data)
+            report_send_interval = data
+            print(f"Report send interval updated to: {report_send_interval}")
+        except ValueError:
             metrics = process_metrics(data)
             print(f"{metrics}")
-        except ValueError:
-            print(f"Error processing metric: {data}")
-
+        
 def process_metrics(data):
     if "CPU Usage" in data or "Context Switches" in data:
         return f"Received: {data}\n"
     return "Unknown metric"
 
 def send_periodic_message(sock, server_ip, port):
-    global report_send_interval
+    
     while True:
-        time.sleep(report_send_interval)
+        
         cpu_usage, num_processes, context_switches = collect_metrics()
         message = f"CPU Usage: {cpu_usage:.2f}%, Processes: {num_processes}, Context Switches: {context_switches}"
         sock.sendto(message.encode(), (server_ip, port))
@@ -151,8 +153,10 @@ def collect_metrics():
     # Load eBPF program
     b = BPF(text=bpf_program)
 
+    global report_send_interval
     while True:
         try:
+            time.sleep(report_send_interval)
             total_cpu_usage = 0
             process_count = 0
             context_switches = 0
