@@ -9,6 +9,8 @@ report_send_interval = 5
 # Set to keep track of connected clients
 clients = set()
 
+articipating_machines = ['','']
+
 def get_local_ip():
     """
     Get the local IP address of the machine.
